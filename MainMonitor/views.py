@@ -1,11 +1,10 @@
 from django.shortcuts import render
-from django.http import HttpResponse
 from .models import ServerInfoThreshold
 from .serializers import ServerInfoThresholdSerializer
 from rest_framework import status, generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
-import json
+from ipware.ip import get_ip
 
 
 class ServerInfoThresholdList(generics.ListAPIView):
@@ -37,6 +36,8 @@ class GetIPerfTestAlertMessage(APIView):
     """
     def post(self, request):
         server_ip_dict = dict(request.data)
+        ip = get_ip(request)
+        print(ip)
         print(server_ip_dict['server_ip'])
         return Response(status.HTTP_200_OK)
 
@@ -47,5 +48,7 @@ class GetHTMLPerformanceTestAlertMessage(APIView):
     """
     def post(self, request):
         url_dict = dict(request.data)
+        ip = get_ip(request)
+        print(ip)
         print(url_dict['url'])
         return Response(status.HTTP_200_OK)
