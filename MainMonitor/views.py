@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from ipware.ip import get_ip
 from .iperf_alert import iperf_alert
 from .html_performance_alert import html_performance_alert
+from .server_info_alert import server_info_alert
 
 
 class ServerInfoThresholdList(generics.ListAPIView):
@@ -62,8 +63,7 @@ class GetServerInfoAlertMessage(APIView):
     """
 
     def post(self, request):
-        server_info_dict = dict(request.data)
-        ip = get_ip(request)
-        print(ip)
-        print(server_info_dict)
+        server_info_problematic_dict = dict(request.data)
+        server_info_problematic_ip = get_ip(request)
+        server_info_alert(server_info_problematic_ip, server_info_problematic_dict)
         return Response(status.HTTP_200_OK)
