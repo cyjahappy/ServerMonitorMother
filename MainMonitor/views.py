@@ -5,6 +5,8 @@ from rest_framework import status, generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from ipware.ip import get_ip
+from .iperf_alert import iperf_alert
+from .html_performance_alert import html_performance_alert
 
 
 class ServerInfoThresholdList(generics.ListAPIView):
@@ -34,11 +36,11 @@ class GetIPerfTestAlertMessage(APIView):
     """
     从子服务器中获取iPerf3检验结果不达标的IP地址列表
     """
+
     def post(self, request):
-        server_ip_dict = dict(request.data)
-        ip = get_ip(request)
-        print(ip)
-        print(server_ip_dict['server_ip'])
+        iperf3_problematic_target_server_dict = dict(request.data)
+        iperf3_problematic_source_ip = get_ip(request)
+        iperf_alert(iperf3_problematic_source_ip, iperf3_problematic_target_server_dict)
         return Response(status.HTTP_200_OK)
 
 
@@ -46,9 +48,22 @@ class GetHTMLPerformanceTestAlertMessage(APIView):
     """
     从子服务器中获取前端性能检验结果不达标的URL列表
     """
+
     def post(self, request):
-        url_dict = dict(request.data)
+        html_performance_problematic_target_url_dict = dict(request.data)
+        html_performance_problematic_source_ip = get_ip(request)
+        html_performance_alert(html_performance_problematic_source_ip, html_performance_problematic_target_url_dict)
+        return Response(status.HTTP_200_OK)
+
+
+class GetServerInfoAlertMessage(APIView):
+    """
+    从子服务器中接收系统各项指标超过阈值的报警信息
+    """
+
+    def post(self, request):
+        server_info_dict = dict(request.data)
         ip = get_ip(request)
         print(ip)
-        print(url_dict['url'])
+        print(server_info_dict)
         return Response(status.HTTP_200_OK)
