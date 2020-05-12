@@ -8,6 +8,7 @@ from ipware.ip import get_ip
 from .iperf_alert import iperf_alert
 from .html_performance_alert import html_performance_alert
 from .server_info_alert import server_info_alert
+from .update_child_server_threshold import update_child_server_threshold
 
 
 class ServerInfoThresholdList(generics.ListAPIView):
@@ -24,6 +25,7 @@ class ServerInfoThresholdUpdate(generics.UpdateAPIView):
     """
     queryset = ServerInfoThreshold.objects.all()
     serializer_class = ServerInfoThresholdSerializer
+    update_child_server_threshold()
 
 
 def dashboard(request):
