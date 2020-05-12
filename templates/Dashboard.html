@@ -125,12 +125,36 @@
                             </tr>
 
                             <tr>
-                              <td>服务器间文件传输速度</td>
+                              <td>源服务器向目标服务器发送TCP包的速率</td>
                               <td>
                                   <div class="input-group mb-3">
-                                      <input type="text" class="form-control" aria-label="File Transfer Speed Threshold" id="file_transfer_speed_threshold_box">
+                                      <input type="text" class="form-control" aria-label="TCP Sent Mbps Threshold" id="tcp_sent_Mbps_threshold_box">
                                       <div class="input-group-append">
-                                          <span class="input-group-text">MB/s</span>
+                                          <span class="input-group-text">Mbps</span>
+                                      </div>
+                                  </div>
+                              </td>
+                            </tr>
+
+                            <tr>
+                              <td>源服务器从目标服务器接收TCP包的速率</td>
+                              <td>
+                                  <div class="input-group mb-3">
+                                      <input type="text" class="form-control" aria-label="TCP Received Mbps Threshold" id="tcp_received_Mbps_threshold_box">
+                                      <div class="input-group-append">
+                                          <span class="input-group-text">Mbps</span>
+                                      </div>
+                                  </div>
+                              </td>
+                            </tr>
+
+                            <tr>
+                              <td>Ping的延迟</td>
+                              <td>
+                                  <div class="input-group mb-3">
+                                      <input type="text" class="form-control" aria-label="Ping Threshold" id="ping_threshold_box">
+                                      <div class="input-group-append">
+                                          <span class="input-group-text">秒</span>
                                       </div>
                                   </div>
                               </td>
@@ -154,7 +178,7 @@
 
 <script>
     //调用api修改服务器各项指标阈值
-    function modifyThresholdAPI(cpu_value, memory_value, disk_value, bandwidth_value, html_open_time_value, backend_management_system_open_time_value, microservices_exec_time_value,file_transfer_speed_value) {
+    function modifyThresholdAPI(cpu_value, memory_value, disk_value, bandwidth_value, html_open_time_value, backend_management_system_open_time_value, microservices_exec_time_value,tcp_sent_Mbps_threshold_value, tcp_received_Mbps_value, ping_value) {
         $.ajax({
                 type:'PUT',
                 url:'/server-info-threshold-update/1/',
@@ -166,7 +190,9 @@
                     'HTML_open_time_threshold': html_open_time_value,
                     'backend_management_system_open_time_threshold': backend_management_system_open_time_value,
                     'microservices_exec_time_threshold': microservices_exec_time_value,
-                    'file_transfer_speed_threshold': file_transfer_speed_value,
+                    'tcp_sent_Mbps_threshold': tcp_sent_Mbps_threshold_value,
+                    'tcp_received_Mbps_threshold': tcp_received_Mbps_value,
+                    'ping_threshold': ping_value,
                 },
                 success:function(arg) {}
             });
@@ -180,8 +206,10 @@
         let HTML_open_time_threshold = document.getElementById("HTML_open_time_threshold_box").value;
         let backend_management_system_open_time_threshold = document.getElementById("backend_management_system_open_time_threshold_box").value;
         let microservices_exec_time_threshold = document.getElementById("microservices_exec_time_threshold_box").value;
-        let file_transfer_speed_threshold = document.getElementById("file_transfer_speed_threshold_box").value;
-        modifyThresholdAPI(cpu_threshold, memory_threshold, disk_threshold, bandwidth_threshold, HTML_open_time_threshold, backend_management_system_open_time_threshold, microservices_exec_time_threshold, file_transfer_speed_threshold);
+        let tcp_sent_Mbps_threshold = document.getElementById("tcp_sent_Mbps_threshold_box").value;
+        let tcp_received_Mbps_threshold = document.getElementById("tcp_received_Mbps_threshold_box").value;
+        let ping_threshold = document.getElementById("ping_threshold_box").value;
+        modifyThresholdAPI(cpu_threshold, memory_threshold, disk_threshold, bandwidth_threshold, HTML_open_time_threshold, backend_management_system_open_time_threshold, microservices_exec_time_threshold, tcp_sent_Mbps_threshold, tcp_received_Mbps_threshold, ping_threshold);
         location.reload();
     }
 </script>

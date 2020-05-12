@@ -12,7 +12,7 @@ from .server_info_alert import server_info_alert
 
 class ServerInfoThresholdList(generics.ListAPIView):
     """
-    定义GET操作,返回JSON格式的服务器各项指标阈值(REST)   待更新!!!
+    定义GET操作,返回JSON格式的服务器各项指标阈值
     """
     queryset = ServerInfoThreshold.objects.all()
     serializer_class = ServerInfoThresholdSerializer
@@ -20,7 +20,7 @@ class ServerInfoThresholdList(generics.ListAPIView):
 
 class ServerInfoThresholdUpdate(generics.UpdateAPIView):
     """
-    定义PUT操作,更新服务期各项指标阈值(REST)           待更新!!!
+    定义PUT操作,更新服务期各项指标阈值
     """
     queryset = ServerInfoThreshold.objects.all()
     serializer_class = ServerInfoThresholdSerializer
@@ -28,7 +28,7 @@ class ServerInfoThresholdUpdate(generics.UpdateAPIView):
 
 def dashboard(request):
     """
-    渲染Dashboard前端页面     目前用来测试调整阈值的API,待更新!!!
+    渲染Dashboard前端页面     目前用来测试调整阈值的API
     """
     return render(request, 'Dashboard.html', locals())
 
