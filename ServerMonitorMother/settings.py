@@ -26,8 +26,26 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'MainMonitor.apps.MainmonitorConfig',
+    # REST API框架
     'rest_framework',
+    # 分布式任务功能
+    'django_celery_results',
+    # 定时任务功能
+    'django_celery_beat'
 ]
+
+# 设置存储Celery任务队列的Redis数据库
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+
+# 设置存储Celery任务结果的数据库
+CELERY_RESULT_BACKEND = 'django-db'
+
+# 设置定时任务相关配置
+CELERY_TIMEZONE = 'Asia/Shanghai'
+CELERY_ENABLE_UTC = False
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
