@@ -13,11 +13,11 @@ def update_child_server_threshold():
 
     server_info_threshold = ServerInfoThreshold.objects.get(pk=1)
     serializer = ServerInfoThresholdSerializer(server_info_threshold)
-    server_ip_all = ChildServerList.objects.all()
-    total_server_ip = server_ip_all.count()
+    server_ip_all_QuerySet = ChildServerList.objects.all()
+    total_server_ip = server_ip_all_QuerySet.count()
     i = 0
     while i < total_server_ip:
-        server_ip = server_ip_all[i].server_ip
+        server_ip = server_ip_all_QuerySet[i].server_ip
         url = 'http://' + server_ip + ':8001/server-info-threshold-update/1/'
         requests.put(url, data=serializer.data)
         i = i + 1

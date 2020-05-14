@@ -1,3 +1,4 @@
+import requests
 from django.shortcuts import render
 from .models import ServerInfoThreshold
 from .serializers import ServerInfoThresholdSerializer
@@ -9,6 +10,8 @@ from .iperf_alert import iperf_alert
 from .html_performance_alert import html_performance_alert
 from .server_info_alert import server_info_alert
 from .update_child_server_threshold import update_child_server_threshold
+from .send_request import send_get_request_to_server, send_post_request_to_server
+from .general_function import get_child_server_ip_list
 
 
 class ServerInfoThresholdList(generics.ListAPIView):
@@ -28,10 +31,27 @@ class ServerInfoThresholdUpdate(generics.UpdateAPIView):
     update_child_server_threshold()
 
 
-def dashboard(request):
+def dashboard(request, server_ip):
     """
-    渲染Dashboard前端页面     目前用来测试调整阈值的API
+    渲染Dashboard前端页面
     """
+    server_ip_list = get_child_server_ip_list()
+    server_info = send_get_request_to_server(server_ip, 'server-info-minutes')
+    # CRM首页前端性能测试结果
+    CRM_HTML_test_result = send_post_request_to_server(server_ip, 'html-performance-test-results-minutes',
+                                                       {"url": "https://taobao.com"})
+    # 后台管理系统前端性能测试结果
+    Management_System_HTML_test_result = send_post_request_to_server(server_ip, 'html-performance-test-results-minutes',
+                                                                     {"url": "https://apple.com.cn"})
+    iperf_test_results = send_get_request_to_server(server_ip, 'iperf-test-results-minutes')
+    # ping_test_results = send_get_request_to_server(server_ip, '')
+    data = {
+        'server_ip': server_ip,
+        'server_ip_list': server_ip_list,
+        'server_info': server_info,
+        'CRM_HTML_test_result': CRM_HTML_test_result,
+        'Management_System_HTML_test_result': Management_System_HTML_test_result,
+    }
     return render(request, 'Dashboard.html', locals())
 
 

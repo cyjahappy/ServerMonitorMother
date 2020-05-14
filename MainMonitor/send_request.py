@@ -1,5 +1,6 @@
 import requests
 from .models import ChildServerList
+from .general_function import bytes_to_dict
 
 server_ip_all = ChildServerList.objects.all()
 total_server_ip = server_ip_all.count()
@@ -17,3 +18,27 @@ def send_get_request_to_all_child_servers(path):
         url = 'http://' + server_ip + ':8001/' + path
         requests.get(url)
         i = i + 1
+
+
+def send_get_request_to_server(server_ip, path):
+    """
+    发送http://[server_ip]/path的GET请求
+    :param server_ip:
+    :param path:
+    :return Response from server:
+    """
+    url = 'http://' + server_ip + ':8001/' + path
+    response = requests.get(url)
+    if type(response.content) is bytes:
+        response_content_dict = bytes_to_dict(response.content)
+        return response_content_dict
+    return response.content
+
+
+def send_post_request_to_server(server_ip, path, data):
+    url = 'http://' + server_ip + ':8001/' + path
+    response = requests.post(url, data=data)
+    if type(response.content) is bytes:
+        response_content_dict = bytes_to_dict(response.content)
+        return response_content_dict
+    return response.content
