@@ -35,7 +35,9 @@ def dashboard(request, server_ip):
     """
     渲染Dashboard前端页面
     """
+    # 所有子服务器IP组成的列表
     server_ip_list = get_child_server_ip_list()
+    # 该server_ip对应的主机的系统各项指标信息
     server_info = send_get_request_to_server(server_ip, 'server-info-minutes')
     # CRM首页前端性能测试结果
     CRM_HTML_test_result = send_post_request_to_server(server_ip, 'html-performance-test-results-minutes',
@@ -43,14 +45,52 @@ def dashboard(request, server_ip):
     # 后台管理系统前端性能测试结果
     Management_System_HTML_test_result = send_post_request_to_server(server_ip, 'html-performance-test-results-minutes',
                                                                      {"url": "https://apple.com.cn"})
-    iperf_test_results = send_get_request_to_server(server_ip, 'iperf-test-results-minutes')
-    # ping_test_results = send_get_request_to_server(server_ip, '')
-    data = {
+    # 系统各项指标信息的阈值
+    server_info_threshold = ServerInfoThreshold.objects.get(id=1)
+    general_data = {
         'server_ip': server_ip,
         'server_ip_list': server_ip_list,
-        'server_info': server_info,
-        'CRM_HTML_test_result': CRM_HTML_test_result,
-        'Management_System_HTML_test_result': Management_System_HTML_test_result,
+    }
+    server_info_data = {
+        'cpu': server_info['cpu'],
+        'memory': server_info['memory'],
+        'disk': server_info['disk'],
+        'network': server_info['network'],
+        'network_recv': server_info['network_recv'],
+        'network_sent': server_info['network_sent'],
+        'date': server_info['date'],
+    }
+    server_info_threshold_data = {
+        'cpu_threshold': server_info_threshold.cpu_threshold,
+        'memory_threshold': server_info_threshold.memory_threshold,
+        'disk_threshold': server_info_threshold.disk_threshold,
+        'bandwidth_threshold': server_info_threshold.bandwidth_threshold,
+        'ping_threshold': server_info_threshold.ping_threshold,
+        'HTML_open_time_threshold': server_info_threshold.HTML_open_time_threshold,
+        'backend_management_system_open_time_threshold': server_info_threshold.backend_management_system_open_time_threshold,
+        'microservices_exec_time_threshold': server_info_threshold.microservices_exec_time_threshold,
+        'tcp_sent_Mbps_threshold': server_info_threshold.tcp_sent_Mbps_threshold,
+        'tcp_received_Mbps_threshold': server_info_threshold.tcp_received_Mbps_threshold,
+    }
+    CRM_HTML_test_result_data = {
+        'dns_query': CRM_HTML_test_result['dns_query'],
+        'tcp_connection': CRM_HTML_test_result['tcp_connection'],
+        'request': CRM_HTML_test_result['request'],
+        'dom_parse': CRM_HTML_test_result['dom_parse'],
+        'blank_screen': CRM_HTML_test_result['blank_screen'],
+        'dom_ready': CRM_HTML_test_result['dom_ready'],
+        'onload': CRM_HTML_test_result['onload'],
+        'date': CRM_HTML_test_result['date'],
+    }
+    Management_System_HTML_test_result_data = {
+        'dns_query': Management_System_HTML_test_result['dns_query'],
+        'tcp_connection': Management_System_HTML_test_result['tcp_connection'],
+        'request': Management_System_HTML_test_result['request'],
+        'dom_parse': Management_System_HTML_test_result['dom_parse'],
+        'blank_screen': Management_System_HTML_test_result['blank_screen'],
+        'dom_ready': Management_System_HTML_test_result['dom_ready'],
+        'onload': Management_System_HTML_test_result['onload'],
+        'date': Management_System_HTML_test_result['date'],
     }
     return render(request, 'Dashboard.html', locals())
 
