@@ -613,36 +613,36 @@
       </div>
   </div>
 
-    <!--放置有关Ping数据的行-->
+    <!--放置有关CRM_HTML数据的行-->
     <div class="row bg-light">
         <!--左半边-->
         <div class="col-sm-6">
             <div class="card card-chart">
                 <div class="card-header bg-white">
-                    <h6 class="card-title text-center">Ping Result</h6>
+                    <h6 class="card-title text-center">CRM HTML页面打开时长</h6>
                 </div>
                 <div class="card-body bg-white">
-                    <!--用于放置Ping Line Chart-->
-                    <div id="ping_result_dashboard" style="width: 100%;height:300px;"></div>
+                    <!--用于放置CRM HTML Line Chart-->
+                    <div id="CRM_HTML_test_result_dashboard" style="width: 100%;height:300px;"></div>
                         <script type="text/javascript">
-                            // 初始化PingLineCharts实例
-                            var pingChart = echarts.init(document.getElementById('ping_result_dashboard'),'cyj-line_chart');
+                            // 初始化CRMHTMLLineCharts实例
+                            var CRMHTMLLineChart = echarts.init(document.getElementById('CRM_HTML_test_result_dashboard'),'cyj-line_chart');
 
                             // 声明有关Ping数据的全局变量
-                            var ping_data = [];
-                            var ping_date = [];
+                            var CRM_HTML_onload_data = {{ CRM_HTML_test_result_data['onload']|safe }};
+                            var CRM_HTML_onload_date = {{ CRM_HTML_test_result_data['date']|safe }};
 
                             // 指定图表的配置项和数据
-                            var ping_line_chart_option = {
+                            var CRM_HTML_line_chart_option = {
                                 tooltip: {},
                                 xAxis: {
-                                    data: ping_date
+                                    data: CRM_HTML_onload_date
                                 },
                                 yAxis: {},
                                 series: [{
                                     name: 'seconds',
                                     type: 'line',
-                                    data: ping_data,
+                                    data: CRM_HTML_onload_data,
                                     areaStyle: {
                                         normal:{
                                         color: {
@@ -664,8 +664,35 @@
                                 color:['#f95056']
                             };
                             // 使用刚指定的配置项和数据显示图表。
-                            pingChart.setOption(ping_line_chart_option);
+                            CRMHTMLLineChart.setOption(CRM_HTML_line_chart_option);
                             </script>
+                </div>
+                <div class="card-footer bg-white">
+                    <h6 class="card-title text-center">{{ CRM_HTML_test_result_data['date'][0]|safe }}-{{ CRM_HTML_test_result_data['date'][-1]|safe }}期间 CRM HTML性能测试结果平均值</h6>
+                    <table data-toggle="table">
+                        <thead>
+                            <tr>
+                            <th>DNS查询耗时</th>
+                            <th>TCP连接耗时</th>
+                            <th>Request请求耗时</th>
+                            <th>解析DOM树耗时</th>
+                            <th>白屏时间</th>
+                            <th>DOM Ready耗时</th>
+                            <th>页面完全加载完毕耗时</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{ CRM_HTML_test_result_data['dns_query_mean'] }}秒</td>
+                                <td>{{ CRM_HTML_test_result_data['tcp_connection_mean'] }}秒</td>
+                                <td>{{ CRM_HTML_test_result_data['request_mean'] }}秒</td>
+                                <td>{{ CRM_HTML_test_result_data['dom_parse_mean'] }}秒</td>
+                                <td>{{ CRM_HTML_test_result_data['blank_screen_mean'] }}秒</td>
+                                <td>{{ CRM_HTML_test_result_data['dom_ready_mean'] }}秒</td>
+                                <td>{{ CRM_HTML_test_result_data['onload_mean'] }}秒</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

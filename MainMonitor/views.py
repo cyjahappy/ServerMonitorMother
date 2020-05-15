@@ -12,7 +12,7 @@ from .server_info_alert import server_info_alert
 from .update_child_server_threshold import update_child_server_threshold
 from .send_request import send_get_request_to_server, send_post_request_to_server
 from .general_function import get_child_server_ip_list
-
+from numpy import mean
 
 class ServerInfoThresholdList(generics.ListAPIView):
     """
@@ -74,12 +74,19 @@ def dashboard(request, server_ip):
     }
     CRM_HTML_test_result_data = {
         'dns_query': CRM_HTML_test_result['dns_query'],
+        'dns_query_mean': round(mean(CRM_HTML_test_result['dns_query']), 2),
         'tcp_connection': CRM_HTML_test_result['tcp_connection'],
+        'tcp_connection_mean': round(mean(CRM_HTML_test_result['tcp_connection']), 2),
         'request': CRM_HTML_test_result['request'],
+        'request_mean': round(mean(CRM_HTML_test_result['request']), 2),
         'dom_parse': CRM_HTML_test_result['dom_parse'],
+        'dom_parse_mean': round(mean(CRM_HTML_test_result['dom_parse']), 2),
         'blank_screen': CRM_HTML_test_result['blank_screen'],
+        'blank_screen_mean': round(mean(CRM_HTML_test_result['blank_screen']), 2),
         'dom_ready': CRM_HTML_test_result['dom_ready'],
+        'dom_ready_mean': round(mean(CRM_HTML_test_result['dom_ready']), 2),
         'onload': CRM_HTML_test_result['onload'],
+        'onload_mean': round(mean(CRM_HTML_test_result['onload']), 2),
         'date': CRM_HTML_test_result['date'],
     }
     Management_System_HTML_test_result_data = {
