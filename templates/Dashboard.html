@@ -2,12 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Dashboard</title>
+    <title>{{ general_data['server_ip'] }} 服务器监控</title>
     <link rel="stylesheet" href="/static/css/bootstrap.css">
     <link rel="stylesheet" href="/static/css/bootstrap-grid.css">
     <link rel="stylesheet" href="/static/css/bootstrap-reboot.css">
     <link rel="stylesheet" href="/static/css/bootstrap-table.css">
     <script src="/static/js/jquery.js"></script>
+    <script src="/static/js/popper.min.js"></script>
     <script src="/static/js/echarts.min.js"></script>
     <script src="/static/js/bootstrap.js"></script>
     <script src="/static/js/bootstrap.bundle.js"></script>
@@ -19,7 +20,7 @@
 <nav class="navbar navbar-expand-md navbar-light bg-light">
 
   <!-- 大标题 -->
-  <a class="navbar-brand" href="#">CRM Server Monitor</a>
+  <a class="navbar-brand" href="#">{{ general_data['server_ip'] }}服务器监控</a>
 
   <!-- 定义导航栏在小屏幕中的折叠按钮-->
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
@@ -416,11 +417,11 @@
       </div>
   </div>
 
-  <!--放置三张Line Chart的行-->
-  <div class="row bg-light">
+    <!--放置三张Line Chart的行-->
+    <div class="row bg-light">
 
-      <!--左 Memory Line Chart-->
-      <div class="col-sm-4">
+        <!--左 Memory Line Chart-->
+        <div class="col-sm-4">
           <!--声明一个新卡片-->
           <div class="card card-chart">
 
@@ -482,10 +483,10 @@
               </div>
 
           </div>
-      </div>
+        </div>
 
-      <!--中 Disk Line Chart-->
-      <div class="col-sm-4">
+        <!--中 Disk Line Chart-->
+        <div class="col-sm-4">
           <!--声明一个新卡片-->
           <div class="card card-chart">
 
@@ -546,10 +547,10 @@
               </div>
 
           </div>
-      </div>
+        </div>
 
-      <!--右 Network Line Chart-->
-      <div class="col-sm-4">
+        <!--右 Network Line Chart-->
+        <div class="col-sm-4">
           <!--声明一个新卡片-->
           <div class="card card-chart">
 
@@ -610,10 +611,10 @@
               </div>
 
           </div>
-      </div>
-  </div>
+        </div>
+    </div>
 
-    <!--放置有关CRM_HTML数据的行-->
+    <!--放置有关HTML前端性能测试数据的行-->
     <div class="row bg-light">
         <!--左半边-->
         <div class="col-sm-6">
@@ -628,7 +629,7 @@
                             // 初始化CRMHTMLLineCharts实例
                             var CRMHTMLLineChart = echarts.init(document.getElementById('CRM_HTML_test_result_dashboard'),'cyj-line_chart');
 
-                            // 声明有关Ping数据的全局变量
+                            // 从视图函数中传入用于初始化图表的横纵坐标数据
                             var CRM_HTML_onload_data = {{ CRM_HTML_test_result_data['onload']|safe }};
                             var CRM_HTML_onload_date = {{ CRM_HTML_test_result_data['date']|safe }};
 
@@ -668,17 +669,17 @@
                             </script>
                 </div>
                 <div class="card-footer bg-white">
-                    <h6 class="card-title text-center">{{ CRM_HTML_test_result_data['date'][0]|safe }}-{{ CRM_HTML_test_result_data['date'][-1]|safe }}期间 CRM HTML性能测试结果平均值</h6>
+                    <h6 class="card-title text-center">{{ CRM_HTML_test_result_data['date'][0]|safe }}-{{ CRM_HTML_test_result_data['date'][-1]|safe }}期间 CRM HTML性能测试各个指标平均耗时</h6>
                     <table data-toggle="table">
                         <thead>
                             <tr>
-                            <th>DNS查询耗时</th>
-                            <th>TCP连接耗时</th>
-                            <th>Request请求耗时</th>
-                            <th>解析DOM树耗时</th>
-                            <th>白屏时间</th>
-                            <th>DOM Ready耗时</th>
-                            <th>页面完全加载完毕耗时</th>
+                            <th>DNS查询</th>
+                            <th>TCP连接</th>
+                            <th>Request请求</th>
+                            <th>解析DOM树</th>
+                            <th>白屏</th>
+                            <th>DOM Ready</th>
+                            <th>页面完全加载完毕</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -699,213 +700,180 @@
 
         <!--右半边-->
         <div class="col-sm-6">
-            <div class="card card-chart bg-white">
-                <div class="card-body">
-                    <!--显示阈值的表格-->
+            <div class="card card-chart">
+                <div class="card-header bg-white">
+                    <h6 class="card-title text-center">后台管理系统HTML页面打开时长</h6>
+                </div>
+                <div class="card-body bg-white">
+                    <!--用于放置后台管理系统HTML Line Chart-->
+                    <div id="Management_System_HTML_test_result_dashboard" style="width: 100%;height:300px;"></div>
+                        <script type="text/javascript">
+                            // 初始化ManagementSystemHTMLLineChart实例
+                            var ManagementSystemHTMLLineChart = echarts.init(document.getElementById('Management_System_HTML_test_result_dashboard'),'cyj-line_chart');
+
+                            // 从视图函数中传入用于初始化图表的横纵坐标数据
+                            var Management_System_HTML_onload_data = {{ Management_System_HTML_test_result_data['onload']|safe }};
+                            var Management_System_HTML_onload_date = {{ Management_System_HTML_test_result_data['date']|safe }};
+
+                            // 指定图表的配置项和数据
+                            var Management_System_HTML_line_chart_option = {
+                                tooltip: {},
+                                xAxis: {
+                                    data: Management_System_HTML_onload_date
+                                },
+                                yAxis: {},
+                                series: [
+                                    {
+                                    name: 'seconds',
+                                    type: 'line',
+                                    data: Management_System_HTML_onload_data,
+                                    areaStyle: {
+                                        normal:{
+                                        color: {
+                                            type: 'linear',
+                                            x: 0,
+                                            y: 0,
+                                            x2: 0,
+                                            y2: 1,
+                                            colorStops: [{
+                                                offset: 0, color: '#f57175' // 0% 处的颜色
+                                            }, {
+                                                offset: 1, color: 'white' // 100% 处的颜色
+                                            }],
+                                            global: false // 缺省为 false
+                                        }
+                                        }
+                                    }
+                                    }
+                                ],
+                                color:['#f95056']
+                            };
+                            // 使用刚指定的配置项和数据显示图表。
+                            ManagementSystemHTMLLineChart.setOption(Management_System_HTML_line_chart_option);
+                            </script>
+                </div>
+                <div class="card-footer bg-white">
+                    <h6 class="card-title text-center">{{ Management_System_HTML_test_result_data['date'][0]|safe }}-{{ Management_System_HTML_test_result_data['date'][-1]|safe }} 期间后台管理系统HTML性能测试各个指标平均耗时</h6>
                     <table data-toggle="table">
                         <thead>
                             <tr>
-                            <th>#</th>
-                            <th>Threshold</th>
+                            <th>DNS查询</th>
+                            <th>TCP连接</th>
+                            <th>Request请求</th>
+                            <th>解析DOM树</th>
+                            <th>白屏</th>
+                            <th>DOM Ready</th>
+                            <th>页面完全加载完毕</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                              <td>CPU</td>
-                              <td>
-                                  <div class="progress">
-                                      <div id="cpu_threshold" class="progress-bar bg-dark" role="progressbar" style="width: 90%" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
-                                  </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>Memory</td>
-                              <td>
-                                  <div class="progress">
-                                      <div id="memory_threshold" class="progress-bar bg-dark" role="progressbar" style="width: 90%" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100">90%</div>
-                                  </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>Disk</td>
-                              <td>
-                                  <div class="progress">
-                                      <div id="disk_threshold" class="progress-bar bg-dark" role="progressbar" style="width: 90%" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
-                                  </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>Bandwidth</td>
-                              <td>
-                                  <div class="progress">
-                                      <div id="bandwidth_threshold" class="progress-bar bg-dark" role="progressbar" style="width: 90%" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100"></div>
-                                  </div>
-                              </td>
+                                <td>{{ Management_System_HTML_test_result_data['dns_query_mean'] }}秒</td>
+                                <td>{{ Management_System_HTML_test_result_data['tcp_connection_mean'] }}秒</td>
+                                <td>{{ Management_System_HTML_test_result_data['request_mean'] }}秒</td>
+                                <td>{{ Management_System_HTML_test_result_data['dom_parse_mean'] }}秒</td>
+                                <td>{{ Management_System_HTML_test_result_data['blank_screen_mean'] }}秒</td>
+                                <td>{{ Management_System_HTML_test_result_data['dom_ready_mean'] }}秒</td>
+                                <td>{{ Management_System_HTML_test_result_data['onload_mean'] }}秒</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
-                <!--卡片的底部-->
-                    <div class="card-footer bg-white">
+            </div>
+        </div>
+    </div>
 
-                          <!--更改阈值的按钮-->
-                        <button type="button" class="btn btn-outline-dark" data-toggle="modal" data-target="#exampleModal" style="display:block;margin:0 auto">
-                            更改阈值
+    <!--放置iPerf3测试结果和Ping测试结果数据的行-->
+    <div class="row bg-light">
+        <!--iPerf3测试结果Line Chart(左半边)-->
+        <div class="col-sm-6">
+            <div class="card card-chart">
+                <div class="card-header bg-white">
+                    <h5 class="card-title text-center">iPerf测试</h5>
+                    <h6 class="card-title text-center" id="iPerf3_Chart_Title"></h6>
+                    <div class="dropdown" >
+                        <button class="btn dropdown-toggle btn-outline-dark" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="display:block;margin:0 auto">
+                        选择目标IP地址
                         </button>
-                        <!-- 点击按钮后弹出的模态框 -->
-                        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">更改阈值</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-
-                                    <!--模态框主体部分-->
-                                    <div class="modal-body">
-                                        <table data-toggle="table">
-                                            <thead>
-                                                <tr>
-                                                <th>#</th>
-                                                <th>阈值</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                  <td>CPU使用率</td>
-                                                  <td>
-                                                      <div class="input-group mb-3">
-                                                          <input type="text" class="form-control" aria-label="CPU Threshold" id="cpu_threshold_box" value={{ server_info_threshold_data['cpu_threshold']}}>
-                                                          <div class="input-group-append">
-                                                              <span class="input-group-text">%</span>
-                                                          </div>
-                                                      </div>
-                                                  </td>
-                                                </tr>
-
-                                                <tr>
-                                                  <td>内存占用率</td>
-                                                  <td>
-                                                      <div class="input-group mb-3">
-                                                          <input type="text" class="form-control" aria-label="Memory Threshold" id="memory_threshold_box" value={{ server_info_threshold_data['memory_threshold']}}>
-                                                          <div class="input-group-append">
-                                                              <span class="input-group-text">%</span>
-                                                          </div>
-                                                      </div>
-                                                  </td>
-                                                </tr>
-
-                                                <tr>
-                                                  <td>磁盘占用率</td>
-                                                  <td>
-                                                      <div class="input-group mb-3">
-                                                          <input type="text" class="form-control" aria-label="Disk Threshold" id="disk_threshold_box" value={{ server_info_threshold_data['disk_threshold']}}>
-                                                          <div class="input-group-append">
-                                                              <span class="input-group-text">%</span>
-                                                          </div>
-                                                      </div>
-                                                  </td>
-                                                </tr>
-
-                                                <tr>
-                                                  <td>带宽流量</td>
-                                                  <td>
-                                                      <div class="input-group mb-3">
-                                                          <input type="text" class="form-control" aria-label="Bandwidth Threshold" id="bandwidth_threshold_box" value={{ server_info_threshold_data['bandwidth_threshold']}}>
-                                                          <div class="input-group-append">
-                                                              <span class="input-group-text">%</span>
-                                                          </div>
-                                                      </div>
-                                                  </td>
-                                                </tr>
-
-                                                <tr>
-                                                  <td>CRM的H5页面打开时长</td>
-                                                  <td>
-                                                      <div class="input-group mb-3">
-                                                          <input type="text" class="form-control" aria-label="HTML Open Time Threshold" id="HTML_open_time_threshold_box" value={{ server_info_threshold_data['HTML_open_time_threshold']}}>
-                                                          <div class="input-group-append">
-                                                              <span class="input-group-text">秒</span>
-                                                          </div>
-                                                      </div>
-                                                  </td>
-                                                </tr>
-
-                                                <tr>
-                                                  <td>后台管理系统页面打开时长</td>
-                                                  <td>
-                                                      <div class="input-group mb-3">
-                                                          <input type="text" class="form-control" aria-label="Backend Management System Open Time Threshold" id="backend_management_system_open_time_threshold_box" value={{ server_info_threshold_data['backend_management_system_open_time_threshold']}}>
-                                                          <div class="input-group-append">
-                                                              <span class="input-group-text">秒</span>
-                                                          </div>
-                                                      </div>
-                                                  </td>
-                                                </tr>
-
-                                                <tr>
-                                                  <td>微服务执行时长</td>
-                                                  <td>
-                                                      <div class="input-group mb-3">
-                                                          <input type="text" class="form-control" aria-label="Microservices Exec Time Threshold" id="microservices_exec_time_threshold_box" value={{ server_info_threshold_data['microservices_exec_time_threshold']}}>
-                                                          <div class="input-group-append">
-                                                              <span class="input-group-text">秒</span>
-                                                          </div>
-                                                      </div>
-                                                  </td>
-                                                </tr>
-
-                                                <tr>
-                                                  <td>源服务器向目标服务器发送TCP包的速率</td>
-                                                  <td>
-                                                      <div class="input-group mb-3">
-                                                          <input type="text" class="form-control" aria-label="TCP Sent Mbps Threshold" id="tcp_sent_Mbps_threshold_box" value={{ server_info_threshold_data['tcp_sent_Mbps_threshold']}}>
-                                                          <div class="input-group-append">
-                                                              <span class="input-group-text">Mbps</span>
-                                                          </div>
-                                                      </div>
-                                                  </td>
-                                                </tr>
-
-                                                <tr>
-                                                  <td>源服务器从目标服务器接收TCP包的速率</td>
-                                                  <td>
-                                                      <div class="input-group mb-3">
-                                                          <input type="text" class="form-control" aria-label="TCP Received Mbps Threshold" id="tcp_received_Mbps_threshold_box" value={{ server_info_threshold_data['tcp_received_Mbps_threshold']}}>
-                                                          <div class="input-group-append">
-                                                              <span class="input-group-text">Mbps</span>
-                                                          </div>
-                                                      </div>
-                                                  </td>
-                                                </tr>
-
-                                                <tr>
-                                                  <td>Ping的延迟</td>
-                                                  <td>
-                                                      <div class="input-group mb-3">
-                                                          <input type="text" class="form-control" aria-label="Ping Threshold" id="ping_threshold_box" value={{ server_info_threshold_data['ping_threshold']}}>
-                                                          <div class="input-group-append">
-                                                              <span class="input-group-text">秒</span>
-                                                          </div>
-                                                      </div>
-                                                  </td>
-                                                </tr>
-
-                                            </tbody>
-                                        </table>
-                                    </div>
-
-                                    <!--模态框底部-->
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                        <button type="button" class="btn btn-primary" onclick="modifyThreshold()">Save changes</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <!--下拉菜单选择IP地址-->
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" id="server_ip_menu"></div>
                     </div>
+                </div>
+                <div class="card-body bg-white">
+                    <!--用于放置iPerf3 Line Chart-->
+                    <div id="iPerf3_test_result_dashboard" style="width: 100%;height:300px;"></div>
+                        <script type="text/javascript">
+                            // 初始化CRMHTMLLineCharts实例
+                            var iPerf3LineChart = echarts.init(document.getElementById('iPerf3_test_result_dashboard'));
+
+                            // 从视图函数中传入用于初始化图表的横纵坐标数据
+                            var iPerf3_TCP_sent_Mbps_data
+                            var iPerf3_TCP_received_Mbps_data
+                            var iPerf3_date
+                            var server_ip_list = {{ server_ip_list|safe}}
+                            var iPerf3_target_server_ip = server_ip_list[0]
+
+                            //用于初始化副标题中源主机与目标主机IP地址
+                            document.getElementById("iPerf3_Chart_Title").innerHTML = "源主机IP: {{ general_data['server_ip'] }}, 目标主机IP: "+ iPerf3_target_server_ip
+
+
+                            //用于填充选择IP地址的下拉菜单
+                            for (var i=0;i<server_ip_list.length;i++)
+                            {
+                                document.getElementById("server_ip_menu").innerHTML = document.getElementById("server_ip_menu").innerHTML + "<button class=\"dropdown-item\" onclick=\"refresh_iPerf3_Line_Chart('" + server_ip_list[i] + "')\">" + server_ip_list[i] + "</button>"
+                            }
+
+                            //用于初始化图表的数据
+                            $.ajax({
+                                        type:'POST',
+                                        url:'http://{{ general_data['server_ip']}}:8001/iperf-test-results-minutes',
+                                        dataType:'json',
+                                        data: {
+                                            'server_ip': iPerf3_target_server_ip
+                                        },
+                                        success:function(json)
+                                            {
+                                                iperf3_test_result = eval(json);
+
+                                                iPerf3_TCP_sent_Mbps_data = iperf3_test_result.sent_Mbps;
+                                                iPerf3_TCP_received_Mbps_data = iperf3_test_result.received_Mbps;
+                                                iPerf3_date = iperf3_test_result.date;
+
+                                                iPerf3LineChart.setOption({
+                                                tooltip: {
+                                                    trigger: 'axis'
+                                                },
+                                                legend: {
+                                                    data: ['TCP发送速率(Mbps)', 'TCP接收速率(Mbps)']
+                                                },
+                                                xAxis: {
+                                                    data: iPerf3_date
+                                                },
+                                                yAxis: {},
+                                                series: [
+                                                    {
+                                                        name: 'TCP发送速率(Mbps)',
+                                                        type: 'line',
+                                                        data: iPerf3_TCP_sent_Mbps_data,
+                                                        stack: '',
+                                                    },
+                                                    {
+                                                        name: 'TCP接收速率(Mbps)',
+                                                        type: 'line',
+                                                        data: iPerf3_TCP_received_Mbps_data,
+                                                        stack: '',
+                                                    }
+                                                ]
+                                                });
+                                            }
+                                    });
+                            </script>
+                </div>
+            </div>
+        </div>
+        <!--Ping测试结果Line Chart(右半边)-->
+        <div class="col-sm-6">
+
         </div>
     </div>
 </div>
@@ -919,66 +887,54 @@
     var server_info
     var real_time_server_info
 
-    //调用api修改服务器各项指标阈值
-    function modifyThresholdAPI(cpu_value, memory_value, disk_value, bandwidth_value, html_open_time_value, backend_management_system_open_time_value, microservices_exec_time_value,tcp_sent_Mbps_threshold_value, tcp_received_Mbps_value, ping_value) {
+function refresh_iPerf3_Line_Chart(ip){
+        iPerf3_target_server_ip = ip
+        document.getElementById("iPerf3_Chart_Title").innerHTML = "源主机IP: {{ general_data['server_ip'] }}, 目标主机IP: "+ iPerf3_target_server_ip
         $.ajax({
-                type:'PUT',
-                url:'/server-info-threshold-update/1/',
+                type:'POST',
+                url:'http://{{ general_data['server_ip']}}:8001/iperf-test-results-minutes',
+                dataType:'json',
                 data: {
-                    'cpu_threshold' : cpu_value,
-                    'memory_threshold': memory_value,
-                    'disk_threshold': disk_value,
-                    'bandwidth_threshold': bandwidth_value,
-                    'HTML_open_time_threshold': html_open_time_value,
-                    'backend_management_system_open_time_threshold': backend_management_system_open_time_value,
-                    'microservices_exec_time_threshold': microservices_exec_time_value,
-                    'tcp_sent_Mbps_threshold': tcp_sent_Mbps_threshold_value,
-                    'tcp_received_Mbps_threshold': tcp_received_Mbps_value,
-                    'ping_threshold': ping_value,
+                    'server_ip': ip
                 },
-                success:function(arg) {}
-            });
-    }
-    //从输入框中获取数值并调用modifyThresholdAPI(),然后刷新当前页面
-    function modifyThreshold() {
-        let cpu_threshold = document.getElementById("cpu_threshold_box").value;
-        let memory_threshold = document.getElementById("memory_threshold_box").value;
-        let disk_threshold = document.getElementById("disk_threshold_box").value;
-        let bandwidth_threshold = document.getElementById("bandwidth_threshold_box").value;
-        let HTML_open_time_threshold = document.getElementById("HTML_open_time_threshold_box").value;
-        let backend_management_system_open_time_threshold = document.getElementById("backend_management_system_open_time_threshold_box").value;
-        let microservices_exec_time_threshold = document.getElementById("microservices_exec_time_threshold_box").value;
-        let tcp_sent_Mbps_threshold = document.getElementById("tcp_sent_Mbps_threshold_box").value;
-        let tcp_received_Mbps_threshold = document.getElementById("tcp_received_Mbps_threshold_box").value;
-        let ping_threshold = document.getElementById("ping_threshold_box").value;
-        modifyThresholdAPI(cpu_threshold, memory_threshold, disk_threshold, bandwidth_threshold, HTML_open_time_threshold, backend_management_system_open_time_threshold, microservices_exec_time_threshold, tcp_sent_Mbps_threshold, tcp_received_Mbps_threshold, ping_threshold);
-        location.reload();
-    }
+                success:function(json)
+                    {
+                        iperf3_test_result = eval(json);
 
-//调用api获取服务器各项指标阈值,并显示为表格中的进度条
-    $.ajax({
-    type:'GET',
-    url:'http://{{ general_data['server_ip']}}:8001/server-info-threshold-api',
-    dataType:'json',
-    success:function(json)
-        {
-             server_info_threshold = eval(json);
-             //初始化进度条中的阈值数据
-             document.getElementById("cpu_threshold").innerHTML = server_info_threshold.cpu_threshold + '%';
-             document.getElementById("cpu_threshold").setAttribute("aria-valuenow", server_info_threshold.cpu_threshold);
-             document.getElementById("cpu_threshold").style.width = server_info_threshold.cpu_threshold + "%";
-             document.getElementById("memory_threshold").innerHTML = server_info_threshold.memory_threshold + '%';
-             document.getElementById("memory_threshold").setAttribute("aria-valuenow", server_info_threshold.memory_threshold);
-             document.getElementById("memory_threshold").style.width = server_info_threshold.memory_threshold + "%";
-             document.getElementById("disk_threshold").innerHTML = server_info_threshold.disk_threshold + '%';
-             document.getElementById("disk_threshold").setAttribute("aria-valuenow", server_info_threshold.disk_threshold);
-             document.getElementById("disk_threshold").style.width = server_info_threshold.disk_threshold + "%";
-             document.getElementById("bandwidth_threshold").innerHTML = server_info_threshold.bandwidth_threshold + 'MB';
-             //带宽的进度条这ban获取的数值都有乘10
-             document.getElementById("bandwidth_threshold").setAttribute("aria-valuenow", server_info_threshold.bandwidth_threshold*10);
-             document.getElementById("bandwidth_threshold").style.width = server_info_threshold.bandwidth_threshold*10 + "%";
-        }
-    });
+                        iPerf3_TCP_sent_Mbps_data = iperf3_test_result.sent_Mbps;
+                        iPerf3_TCP_received_Mbps_data = iperf3_test_result.received_Mbps;
+                        iPerf3_date = iperf3_test_result.date;
+
+                        iPerf3LineChart.setOption({
+                        tooltip: {
+                            trigger: 'axis'
+                        },
+                        legend: {
+                            data: ['TCP发送速率(Mbps)', 'TCP接收速率(Mbps)']
+                        },
+                        xAxis: {
+                            data: iPerf3_date
+                        },
+                        yAxis: {},
+                        series: [
+                            {
+                                name: 'TCP发送速率(Mbps)',
+                                type: 'line',
+                                data: iPerf3_TCP_sent_Mbps_data,
+                                stack: '',
+                            },
+                            {
+                                name: 'TCP接收速率(Mbps)',
+                                type: 'line',
+                                data: iPerf3_TCP_received_Mbps_data,
+                                stack: '',
+                            }
+                        ]
+                        });
+                    }
+            });
+
+}
 
 //用于补上图表上的断层(图表默认获取到前一分钟的数据,这个异步用于获取本分钟的数据)
 $.ajax({
