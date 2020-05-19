@@ -2,6 +2,9 @@
 # 部署的时候要改端口!!!!!!!
 from celery import shared_task
 from .send_request import send_get_request_to_all_child_servers
+from .server_info_alert import server_info_get_error_alert
+from .html_performance_alert import html_performance_result_get_error_alert
+from .iperf_alert import iperf_result_get_error
 
 
 @shared_task
@@ -9,7 +12,9 @@ def check_server_info():
     """
     发送指令使所有子服务器获取并检测系统各项指标
     """
-    send_get_request_to_all_child_servers('server-info-to-db')
+    server_error_list = send_get_request_to_all_child_servers('server-info-to-db')
+    if len(server_error_list) != 0:
+        server_info_get_error_alert(server_error_list)
 
 
 @shared_task
@@ -17,7 +22,9 @@ def html_performance_test():
     """
     发送指令使所有子服务器进行前端性能测试
     """
-    send_get_request_to_all_child_servers('html-performance-test-results-to-db')
+    server_error_list = send_get_request_to_all_child_servers('html-performance-test-results-to-db')
+    if len(server_error_list) != 0:
+        html_performance_result_get_error_alert(server_error_list)
 
 
 @shared_task
@@ -25,7 +32,9 @@ def iperf_test():
     """
     发送指令使所有子服务器相互进行iPerf3测试
     """
-    send_get_request_to_all_child_servers('iperf3-test-results-to-db')
+    server_error_list = send_get_request_to_all_child_servers('iperf3-test-results-to-db')
+    if len(server_error_list) != 0:
+        iperf_result_get_error(server_error_list)
 
 
 @shared_task

@@ -7,3 +7,12 @@ def server_info_alert(server_info_problematic_ip, server_info_problematic_dict):
     """
     print(server_info_problematic_ip)
     print(server_info_problematic_dict)
+
+
+def server_info_get_error_alert(server_error_list):
+    """
+    接收无法获取系统各项指标的子服务器IP地址列表, 生成警报邮件内容
+    :param server_error_list:
+    :return:
+    """
+    print(server_error_list)

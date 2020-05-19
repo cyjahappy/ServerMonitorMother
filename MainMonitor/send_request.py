@@ -11,13 +11,17 @@ def send_get_request_to_all_child_servers(path):
     向所有子服务器逐个发送http://[子服务器的IP]/path的GET请求
     :return:
     """
+    server_error_list = []
     i = 0
     while i < total_server_ip:
         server_ip = server_ip_all[i].server_ip
         # 部署的时候记得改端口!!!!!!!!!!!!!!!!!!!!!!!!!!!
         url = 'http://' + server_ip + ':8001/' + path
-        requests.get(url)
+        response = requests.get(url)
+        if response.status_code == 500:
+            server_error_list.append(server_ip)
         i = i + 1
+    return server_error_list
 
 
 def send_get_request_to_server(server_ip, path):
