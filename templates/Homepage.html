@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Monitor Homepage</title>
+    <title>CRM监控系统主页</title>
     <link rel="stylesheet" href="/static/css/bootstrap.css">
     <link rel="stylesheet" href="/static/css/bootstrap-grid.css">
     <link rel="stylesheet" href="/static/css/bootstrap-reboot.css">
@@ -23,41 +23,49 @@
                         <thead>
                             <tr>
                             <th>#</th>
-                            <th>Threshold</th>
+                            <th>阈值</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                              <td>CPU</td>
+                              <td>CPU占用率</td>
                               <td>
                                   <div class="progress">
-                                      <div id="cpu_threshold" class="progress-bar bg-dark" role="progressbar" style="width: 90%" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
+                                      <div id="cpu_threshold" class="progress-bar bg-dark" role="progressbar" style="width: 90%"></div>
                                   </div>
                               </td>
                             </tr>
                             <tr>
-                              <td>Memory</td>
+                                <td>内存占用率</td>
+                                    <td>
+                                      <div class="progress">
+                                          <div id="memory_threshold" class="progress-bar bg-dark" role="progressbar" style="width: 80%">90%</div>
+                                      </div>
+                                    </td>
+                            </tr>
+                            <tr>
+                              <td>磁盘占用率</td>
                               <td>
                                   <div class="progress">
-                                      <div id="memory_threshold" class="progress-bar bg-dark" role="progressbar" style="width: 90%" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100">90%</div>
+                                      <div id="disk_threshold" class="progress-bar bg-dark" role="progressbar" style="width: 90%"></div>
                                   </div>
                               </td>
                             </tr>
                             <tr>
-                              <td>Disk</td>
-                              <td>
+                                <td>实时带宽</td>
+                                <td>
                                   <div class="progress">
-                                      <div id="disk_threshold" class="progress-bar bg-dark" role="progressbar" style="width: 90%" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
+                                      <div id="bandwidth_threshold" class="progress-bar bg-dark" role="progressbar" style="width: 90%"></div>
                                   </div>
-                              </td>
+                                </td>
                             </tr>
                             <tr>
-                              <td>Bandwidth</td>
-                              <td>
+                                <td>实时带宽</td>
+                                <td>
                                   <div class="progress">
-                                      <div id="bandwidth_threshold" class="progress-bar bg-dark" role="progressbar" style="width: 90%" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100"></div>
+                                      <div id="bandwidth_threshold" class="progress-bar bg-dark" role="progressbar" style="width: 90%"></div>
                                   </div>
-                              </td>
+                                </td>
                             </tr>
                         </tbody>
                     </table>

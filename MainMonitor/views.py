@@ -1,6 +1,5 @@
-import requests
 from django.shortcuts import render
-from .models import ServerInfoThreshold
+from .models import ServerInfoThreshold, ChildServerList
 from .serializers import ServerInfoThresholdSerializer
 from rest_framework import status, generics
 from rest_framework.views import APIView
@@ -59,6 +58,7 @@ def dashboard(request, server_ip):
     """
     渲染Dashboard前端页面
     """
+    child_server_ip_list = get_child_server_ip_list()
     # 该server_ip对应的主机的系统各项指标信息
     server_info = send_get_request_to_server(server_ip, 'server-info-minutes')
     # CRM首页前端性能测试结果
